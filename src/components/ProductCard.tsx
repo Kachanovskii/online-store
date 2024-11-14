@@ -44,13 +44,13 @@ const DetailsLink = styled(Link)`
   color: #007bff;
 `;
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   return (
     <CardContainer>
         <ProductImage src={product.image} alt={product.name} />
         <ProductName>{product.name}</ProductName>
         <ProductPrice>{product.price}</ProductPrice>
-        <AddToCartButton onClick={() => product.onAddToCart(product.id)} />
+        <AddToCartButton onClick={() => onAddToCart(product.id)} />
         <DetailsLink to={`/product/${product.id}`}>View Details</DetailsLink>
     </CardContainer>
   );

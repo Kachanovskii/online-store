@@ -35,7 +35,7 @@ const ProductDescription = styled.p`
   color: #666;
 `;
 
-const ProductPage: React.FC = () => {
+const ProductPage: React.FC = ({onAddToCart}) => {
   const { id } = useParams<{ id: string }>();
 
   const product: Product = {
@@ -52,7 +52,7 @@ const ProductPage: React.FC = () => {
         <ProductImage src={product.image} alt={product.name} />
         <ProductTitle>{product.name}</ProductTitle>
         <ProductPrice>{product.price}</ProductPrice>
-        <AddToCartButton onClick={() => product.onAddToCart(product.id)} />
+        <AddToCartButton onClick={() => onAddToCart(product.id)} />
         <ProductDescription>{product.descriptions}</ProductDescription>
     </ProductContainer>
   );

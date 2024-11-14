@@ -24,20 +24,20 @@ const products: Product[] = [
 ];
 
 const ProductGrid = styled.div`
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    flex-wrap: wrap;
-`
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+`;
 
-const HomePage: React.FC = () => {
+const HomePage: React.FC = ({ onAddToCart }) => {
   return (
     <ProductGrid>
-        {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-        ))}
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
+      ))}
     </ProductGrid>
-  )
+  );
 };
 
 export default HomePage;
