@@ -5,7 +5,7 @@ import AddToCartButton from "./AddToCartButton";
 
 interface Product {
   id: number;
-  name: string;
+  title: string;
   price: number;
   image: string;
   onAddToCart: (id: number) => void;
@@ -25,13 +25,18 @@ const CardContainer = styled.div`
 
 const ProductImage = styled.img`
   width: 100%;
+  height: 100%;
   height: auto;
   border-radius: 8px;
+  aspect-ratio: 1;
+  object-fit: contain;
 `;
 
 const ProductName = styled.h2`
   font-size: 18px;
   margin: 10px 0;
+  max-height: 58px;
+  overflow: hidden;
 `;
 
 const ProductPrice = styled.p`
@@ -47,8 +52,8 @@ const DetailsLink = styled(Link)`
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   return (
     <CardContainer>
-        <ProductImage src={product.image} alt={product.name} />
-        <ProductName>{product.name}</ProductName>
+        <ProductImage src={product.image} alt={product.title} />
+        <ProductName>{product.title}</ProductName>
         <ProductPrice>{product.price}</ProductPrice>
         <AddToCartButton onClick={() => onAddToCart(product.id)} />
         <DetailsLink to={`/product/${product.id}`}>View Details</DetailsLink>

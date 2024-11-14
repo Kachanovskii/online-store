@@ -12,7 +12,7 @@ const FooterContainer = styled.footer`
 const Footer: React.FC = () => {
     return (
         <FooterContainer>
-            <p>&copy; 2024 Simple Online Store. All rights reserved.</p>
+            <span>&copy; 2024 Simple Online Store. All rights reserved.</span>
         </FooterContainer>
     )
 }
