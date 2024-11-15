@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 interface CartItemProps {
   id: number;
-  name: string;
+  title: string;
   price: number;
   quantity: number;
   onUpdateQuantity: (id: number, quantity: number) => void;
-  onRemove: (id: number) => void;
+  onRemove: () => void;
 }
 
 const ItemContainer = styled.div`
@@ -50,22 +50,38 @@ const RemoveButton = styled.button`
 
 const CartItem: React.FC<CartItemProps> = ({
   id,
-  name,
+  title,
   price,
   quantity,
   onUpdateQuantity,
   onRemove,
 }) => {
+  const [localQuantity, setLocalQuantity] = useState(quantity);
+
+  useEffect(() => {
+    setLocalQuantity(quantity);
+  }, [quantity]);
+
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
+
+    if (!isNaN(value) && value >= 1) {
+      setLocalQuantity(value)
+      onUpdateQuantity(id, value);
+    }
+  };
+
   return (
     <ItemContainer>
-      <ItemName>{name}</ItemName>
+      <ItemName>{title}</ItemName>
       <QuantityInput
         type="number"
-        value={quantity}
-        onChange={(e) => onUpdateQuantity(id, parseInt(e.target.value))}
+        min="1"
+        value={localQuantity}
+        onChange={handleQuantityChange}
       />
       <ItemPrice>{price * quantity} грн</ItemPrice>
-      <RemoveButton onClick={() => onRemove(id)} >Видалити</RemoveButton>
+      <RemoveButton onClick={onRemove}>Видалити</RemoveButton>
     </ItemContainer>
   );
 };

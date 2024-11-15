@@ -4,32 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@reduxjs/toolkit/query";
 import { useEffect } from "react";
 import { loadProducts } from "../redux/slices/productsSlice";
+import { addItem } from "../redux/slices/cartSlice";
 
 interface Product {
   id: number;
-  name: string;
+  title: string;
   price: number;
   image: string;
 }
-
-interface HomePageProps {
-  onAddToCart: (product: Product) => void;
-}
-
-// const products: Product[] = [
-//   {
-//     id: 1,
-//     name: "Product 1",
-//     price: 29.99,
-//     image: "https://placehold.co/150x150",
-//   },
-//   {
-//     id: 2,
-//     name: "Product 2",
-//     price: 39.99,
-//     image: "https://placehold.co/150x150",
-//   },
-// ];
 
 const ProductGrid = styled.div`
   display: flex;
@@ -38,22 +20,37 @@ const ProductGrid = styled.div`
   flex-wrap: wrap;
 `;
 
-const HomePage: React.FC<HomePageProps> = ({ onAddToCart }) => {
+const HomePage: React.FC = () => {
   const dispatch = useDispatch();
 
   const products = useSelector((state: RootState) => state.products.items);
   const loading = useSelector((state: RootState) => state.products.loading);
 
+  const handleAddToCart = (product: Product) => {
+    dispatch(
+      addItem({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        quantity: 1,
+      })
+    );
+  };
+
   useEffect(() => {
     dispatch(loadProducts());
   }, [dispatch]);
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <p>Loading...</p>;
 
   return (
     <ProductGrid>
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
+        <ProductCard
+          key={product.id}
+          product={product}
+          onAddToCart={() => handleAddToCart(product)}
+        />
       ))}
     </ProductGrid>
   );

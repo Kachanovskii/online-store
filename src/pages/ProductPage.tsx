@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { fetchProducts } from "../api/productsApi";
 import { setProducts } from "../redux/slices/productsSlice";
 import { AppDispatch } from "../redux/store";
+import { addItem } from "../redux/slices/cartSlice";
 
 interface Product {
   id: number;
@@ -14,10 +15,6 @@ interface Product {
   price: number;
   image: string;
   description: string;
-}
-
-interface ProductPageProps {
-  onAddToCart: (product: Product) => void;
 }
 
 const ProductContainer = styled.div`
@@ -44,7 +41,7 @@ const ProductDescription = styled.p`
   color: #666;
 `;
 
-const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
+const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -52,13 +49,24 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
     state.products.items.find((item) => item.id === Number(id))
   );
 
+  const handleAddToCart = () => {
+    dispatch(
+      addItem({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        quantity: 1,
+      })
+    );
+  };
+
   useEffect(() => {
     if (!product) {
       fetchProducts().then((data) => {
-        dispatch(setProducts(data))
-      })
+        dispatch(setProducts(data));
+      });
     }
-  }, [product, dispatch])
+  }, [product, dispatch]);
 
   if (!product) {
     return <p>Product no found</p>;
@@ -69,7 +77,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
       <ProductImage src={product.image} alt={product.title} />
       <ProductTitle>{product.title}</ProductTitle>
       <ProductPrice>{product.price}</ProductPrice>
-      <AddToCartButton onClick={() => onAddToCart(product.id)} />
+      <AddToCartButton onClick={handleAddToCart} />
       <ProductDescription>{product.description}</ProductDescription>
     </ProductContainer>
   );

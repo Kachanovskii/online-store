@@ -1,12 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import CartItem from "../components/CartItem";
-
-interface CartPageProps {
-  items: Array<{ id: number; name: string; price: number; quantity: number }>;
-  onUpdateQuantity: (id: number, qauntity: number) => void;
-  onRemoveItem: (id: number) => void;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@reduxjs/toolkit/query";
+import { removeItem, updateQuantity } from "../redux/slices/cartSlice";
 
 const PageContainer = styled.div`
   padding: 20px;
@@ -23,15 +20,23 @@ const Total = styled.p`
   margin-top: 20px;
 `;
 
-const CartPage: React.FC<CartPageProps> = ({
-  items,
-  onUpdateQuantity,
-  onRemoveItem,
-}) => {
+const CartPage: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const items = useSelector((state: RootState) => state.cart.items);
+
   const total = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
+
+  const handleUpdateQuantity = (id: string, quantity: number) => {
+    dispatch(updateQuantity({ id, quantity }));
+  };
+
+  const handleRemoveItem = (id: string) => {
+    dispatch(removeItem(id));
+  };
 
   return (
     <PageContainer>
@@ -40,8 +45,8 @@ const CartPage: React.FC<CartPageProps> = ({
         <CartItem
           key={item.id}
           {...item}
-          onUpdateQuantity={onUpdateQuantity}
-          onRemove={onRemoveItem}
+          onUpdateQuantity={(quantity) => handleUpdateQuantity(item.id, quantity)}
+          onRemove={() => handleRemoveItem(item.id)}
         />
       ))}
       <Total>Загальна сума: {total} грн</Total>
