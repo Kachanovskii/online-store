@@ -40,7 +40,6 @@ const Header: React.FC = () => {
       <NavLinks>
         <StyledLink to="/">Home</StyledLink>
         <StyledLink to="/cart">Cart</StyledLink>
-        <StyledLink to="/checkout">Checkout</StyledLink>
       </NavLinks>
     </HeaderContainer>
   );

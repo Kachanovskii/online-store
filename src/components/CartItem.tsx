@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 interface CartItemProps {
@@ -56,17 +56,10 @@ const CartItem: React.FC<CartItemProps> = ({
   onUpdateQuantity,
   onRemove,
 }) => {
-  const [localQuantity, setLocalQuantity] = useState(quantity);
-
-  useEffect(() => {
-    setLocalQuantity(quantity);
-  }, [quantity]);
-
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
 
     if (!isNaN(value) && value >= 1) {
-      setLocalQuantity(value)
       onUpdateQuantity(id, value);
     }
   };
@@ -77,7 +70,7 @@ const CartItem: React.FC<CartItemProps> = ({
       <QuantityInput
         type="number"
         min="1"
-        value={localQuantity}
+        value={quantity}
         onChange={handleQuantityChange}
       />
       <ItemPrice>{price * quantity} грн</ItemPrice>
